@@ -1,9 +1,9 @@
 #include <iostream>
-
-using namespace std;
+#include "VectorBase.h"
 
 int main()
 {
-    cout << "Hello world!" << endl;
+    std::allocator<int> alloc;
+    VectorBase<int> vectorBase(alloc, 10);
     return 0;
 }
