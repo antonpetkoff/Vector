@@ -1,6 +1,8 @@
 #ifndef VECTORBASE_H
 #define VECTORBASE_H
 
+#include <iostream>
+
 template<typename T, typename A = std::allocator<T> >
 class VectorBase
 {

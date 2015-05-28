@@ -1,6 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "VectorBase.h"
 #include <memory>
 
 template<typename T, typename A>
@@ -14,26 +15,30 @@ class Vector
 {
 private:
     VectorBase<T> base;
-    void destroy_elements();
 public:
-    explicit Vector(size_t n, const T& val = T(), const A& alloc = A());
+    Vector() : Vector(0) {}
+    Vector(size_t n, const T& val = T(), const A& alloc = A());
     Vector(const Vector& other);
     Vector& operator=(const Vector& other);
     Vector(Vector&& other);
     Vector& operator=(Vector&& other);
-    ~Vector();
+    ~Vector()                           { clear(); }
 
     int capacity() const                { return base.last - base.first; }
     int size() const                    { return base.space - base.first; }
     bool empty() const                  { return size() == 0; }
     T& operator[](int i)                { return *(base.first + i); }
     const T& operator[](int i) const    { return *(base.first + i); }
+    T& back()                           { return *(base.space - 1); }
+    T& front()                          { return *(base.first); }
 
-    void clear()                        { destroy_elements(); }
+    void clear();
     void reserve(size_t new_size);
     void resize(size_t new_size, const T& val = T());
     void push_back(const T& val);
     void pop_back();
+    void insert(int index, const T& value);
+    void erase(int index);
 
     friend void swap<T, A>(Vector<T, A>& a, Vector<T, A>& b);
 
@@ -54,6 +59,16 @@ private:
             begin->~T();
         }
     }
+
+    static void swap_range_backwards(T* begin, T* end)
+    {
+        T* left = end - 1;
+        while(end != begin)
+        {
+            std::swap(*(left--), *(end--));
+        }
+    }
+
 };
 
 template<typename T, typename A>
@@ -93,14 +108,14 @@ Vector<T, A>::Vector(Vector&& other)
 template<typename T, typename A>
 Vector<T, A>& Vector<T, A>::operator=(Vector&& other)
 {
-    std::cout << "Vector move assignment called\n";
+    //std::cout << "Vector move assignment called\n";
     clear();        // redundant?
     base = std::move(other.base);
     return *this;
 }
 
 template<typename T, typename A>
-void Vector<T, A>::destroy_elements()
+void Vector<T, A>::clear()
 {
     //std::cout << "Vector destructor called\n";
     for (T* cursor = base.first; cursor != base.space; ++cursor)
@@ -110,12 +125,6 @@ void Vector<T, A>::destroy_elements()
     base.space = base.first;
     //std::cout << "Vector destructor finished\n";
     //base.printState();
-}
-
-template<typename T, typename A>
-Vector<T, A>::~Vector()
-{
-    destroy_elements();
 }
 
 template<typename T, typename A>
@@ -174,9 +183,40 @@ void Vector<T,A>::pop_back()
 }
 
 template<typename T, typename A>
+void Vector<T,A>::insert(int index, const T& value)
+{
+    if (index == size() + 1)
+    {
+        return push_back(value);
+    }
+
+    if (size() == capacity())
+    {
+        reserve( size() ? (2 * size()) : 8 );         // grow or start with 8
+    }
+
+    base.alloc.construct(base.space, value);
+    swap_range_backwards(base.first + index, base.space);
+    ++base.space;
+}
+
+template<typename T, typename A>
+void Vector<T,A>::erase(int index)
+{
+    if (empty())
+    {
+        return;
+    }
+
+    base.alloc.destroy(base.first + index);
+    std::move(base.first + index + 1, base.space, base.first + index);
+    --base.space;
+}
+
+template<typename T, typename A>
 void swap(Vector<T, A>& a, Vector<T, A>& b)
 {
     std::swap(a, b);
 }
 
-#endif // VECTORBASE_H
+#endif // VECTOR_H
