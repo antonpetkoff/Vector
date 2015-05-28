@@ -34,6 +34,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/SampleTypes.h" />
 		<Unit filename="include/Vector.h" />
 		<Unit filename="include/VectorBase.h" />
 		<Unit filename="main.cpp" />

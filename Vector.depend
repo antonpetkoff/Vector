@@ -1,10 +1,18 @@
 # depslib dependency file v1.0
-1432652559 source:/home/tony/Documents/Code/Vector/main.cpp
+1432850364 source:/home/tony/Documents/Code/Vector/main.cpp
+	"Vector.h"
 	<iostream>
+	<string>
+
+1432856667 /home/tony/Documents/Code/Vector/include/Vector.h
 	"VectorBase.h"
+	<memory>
+	<cmath>
 
-1432638850 /home/tony/Documents/Code/Vector/include/Vector.h
+1432852556 /home/tony/Documents/Code/Vector/include/VectorBase.h
 	<iostream>
 
-1432653361 /home/tony/Documents/Code/Vector/include/VectorBase.h
+1432802085 /home/tony/Documents/Code/Vector/include/SampleTypes.h
+	<iostream>
+	<string>
 
