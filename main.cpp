@@ -6,7 +6,7 @@ using namespace std;
 template<typename T>
 void printVector(const Vector<T>& vec)
 {
-    std::cout << "===== VECTOR STATUS =====\n";
+    std::cout << "===== printVector =====\n";
     std::cout << "capacity = " << vec.capacity() << ", size = " << vec.size()
         << ", isEmpty = " << vec.empty() << "\n";
     for (int i = 0; i < vec.size(); ++i)
@@ -19,7 +19,7 @@ void printVector(const Vector<T>& vec)
 class Student
 {
 public:
-    Student() : m_name("Georgi"), m_age(19) {}
+    Student() = delete;         // нека не бъде default constructable
     Student(string name, int age) : m_name(name), m_age(age) {}
 
 	friend std::ostream& operator<<(std::ostream& out, const Student& student);
@@ -44,27 +44,13 @@ int main()
     students.push_back(st2);
 
     Vector<int> v1;
-    printVector(v1);
     v1.push_back(1);
-    printVector(v1);
     v1.push_back(13);
-    printVector(v1);
     v1.push_back(37);
-    printVector(v1);
     v1.push_back(73);
-    printVector(v1);
     v1.push_back(121);
-    printVector(v1);
     v1.push_back(181);
-    printVector(v1);
     v1.push_back(253);
-    printVector(v1);
-    v1.push_back(121);
-    printVector(v1);
-    v1.push_back(181);
-    printVector(v1);
-    v1.push_back(253);
-    printVector(v1);
 
     cout << v1.back() << endl; //253
     v1.pop_back();
@@ -96,9 +82,6 @@ int main()
     v3.push_back("vincere");
     v3.push_back("mori");
     v3.insert(2, "aut");
-    printVector(v3);
-    v3.shrink_to_fit();
-    printVector(v3);
 
     //Извежда Aut vincere aut mori
     for (int i = 0; i < v3.size(); i++)
